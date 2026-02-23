@@ -1,0 +1,17 @@
+apiVersion: v1  # Specifies the version of the Kubernetes API to use; "v1" is for core Kubernetes objects.
+kind: Pod       # Specifies the type of resource to create; in this case, a Pod.
+
+metadata:       # Metadata block that contains data to uniquely identify the Pod within the Kubernetes system.
+  name: llmops-pod  # The name of the Pod.
+  labels:       # Labels are key-value pairs attached to objects which can be utilized for organizing and selecting subsets of objects.
+    version: v0.1  # A custom label "version" set to "v0.1", which can be used for filtering or managing versions.
+
+spec:           # The specification section defines the behavior of the Pod.
+  containers:   # This is a list of containers that should be part of this Pod.
+    - name: llmops-fastapi        # The name of the container, here it is set to "llmops-fastapi".
+      image: saurabhgssingh/llmops-k8s:latest  # The Docker image to use for the container, specifying "llmops-k8s" with the "latest" tag.
+      ports:              # A list of ports to expose from the container.
+        - containerPort: 8080  # The container port that our fastapi service inside the container will be listening on.
+      env:               # Environment variables to set inside the container.
+        - name: GROQ_API_KEY   # Name of the environment variable.
+          value: "<api-key>" # Value assigned to the environment variable.

@@ -1,0 +1,75 @@
+# Specifies the API version of Kubernetes for the resource type 'Deployment'.
+# 'apps/v1' is the current API group and version for Deployments.
+apiVersion: apps/v1
+
+# Defines the type of Kubernetes resource being created.
+# In this case, a 'Deployment' for managing a set of pods.
+kind: Deployment
+
+# Metadata section for the Deployment, used to define the name,
+# namespace, and labels for the Deployment.
+metadata:
+
+
+  # Defines the name of the Deployment.
+  # This name will be used to refer to this Deployment within the specified namespace.
+  name: llmops-deployment
+
+  # Labels are key-value pairs that are attached to objects
+  # and can be used in selecting subsets of objects.
+  labels:
+    type: testing
+
+# Specification of the desired behavior of the Deployment.
+spec:
+
+  # Specifies the number of desired pods.
+  # Kubernetes tries to ensure that at least four pods
+  # matching the template are running at all times.
+  replicas: 4
+
+  # Selector configuration for the Deployment.
+  # It matches labels of pods to associate with this Deployment.
+  selector:
+    matchLabels:
+      # Selector field to match labels.
+      # This must match the labels given in the pod template.
+      # It ensures the Deployment manages only the pods with these labels.
+      version: v1
+
+  # Defines the pod template used by the Deployment to create new pods.
+  # The template itself is a pod definition included in the Deployment.
+  template:
+
+    # Metadata for the pods is defined here.
+    # This metadata is common to all pods started as part of this Deployment.
+    metadata:
+
+      # Labels assigned to all pods created from this pod template.
+      # Used to link the selector above.
+      labels:
+        version: v1
+
+    # Specification of the containers to be run in the pod.
+    spec:
+      containers:
+
+        # The name of the container, here it is set to "llmops-fastapi".
+        - name: llmops-fastapi
+
+          # The Docker image to use for the container,
+          # specifying "llmops-k8s" with the "latest" tag.
+          image: saurabhgssingh/llmops-k8s:latest
+
+          # A list of ports to expose from the container.
+          ports:
+            - containerPort: 8080
+              # The container port that our FastAPI service
+              # inside the container will be listening on.
+
+          # Environment variables to set inside the container.
+          env:
+            - name: GROQ_API_KEY
+              # Name of the environment variable.
+              value: "<api-key>"
+              # Value assigned to the environment variable.
